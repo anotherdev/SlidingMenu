@@ -1,0 +1,7 @@
+/gen
+/bin
+/assets
+/res/drawable*
+/proguard
+/.settings
+.DS_Store
