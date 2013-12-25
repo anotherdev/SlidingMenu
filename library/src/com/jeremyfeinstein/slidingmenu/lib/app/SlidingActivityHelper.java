@@ -17,6 +17,7 @@ public class SlidingActivityHelper {
 
 	private SlidingMenu mSlidingMenu;
 
+	@SuppressWarnings("unused")
 	private View mViewAbove;
 
 	private View mViewBehind;
@@ -51,7 +52,7 @@ public class SlidingActivityHelper {
 	 * @param savedInstanceState the saved instance state (unused)
 	 */
 	public void onPostCreate(Bundle savedInstanceState) {
-		if (mViewBehind == null || mViewAbove == null) {
+		if (mViewBehind == null) {
 			throw new IllegalStateException("Both setBehindContentView must be called " +
 					"in onCreate in addition to setContentView.");
 		}
