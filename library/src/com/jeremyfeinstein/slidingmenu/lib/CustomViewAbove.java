@@ -332,9 +332,12 @@ public class CustomViewAbove extends ViewGroup {
 
 	private boolean isInIgnoredView(MotionEvent ev) {
 		Rect rect = new Rect();
+		Rect localRect = new Rect();
 		for (View v : mIgnoredViews) {
 			v.getHitRect(rect);
-			if (rect.contains((int)ev.getX(), (int)ev.getY())) return true;
+			final boolean localVisible = v.getLocalVisibleRect(localRect);
+			rect.bottom = rect.bottom - localRect.top;
+			if (rect.contains((int)ev.getX(), (int)ev.getY()) && localVisible) return true;
 		}
 		return false;
 	}
