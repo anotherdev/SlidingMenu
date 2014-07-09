@@ -15,6 +15,7 @@ import android.support.v4.view.ViewConfigurationCompat;
 import android.util.AttributeSet;
 import android.util.FloatMath;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.FocusFinder;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -333,13 +334,29 @@ public class CustomViewAbove extends ViewGroup {
 	private boolean isInIgnoredView(MotionEvent ev) {
 		Rect rect = new Rect();
 		Rect localRect = new Rect();
+		
+		// Have to substract ActionBar height due to Android bug:
+		// http://stackoverflow.com/a/17751930/802421
+		final int y = (int)ev.getY() - getActionBarHeight();
+		
 		for (View v : mIgnoredViews) {
 			v.getHitRect(rect);
 			final boolean localVisible = v.getLocalVisibleRect(localRect);
 			rect.bottom = rect.bottom - localRect.top;
-			if (rect.contains((int)ev.getX(), (int)ev.getY()) && localVisible) return true;
+			if (rect.contains((int)ev.getX(), y) && localVisible) return true;
 		}
 		return false;
+	}
+	
+	// http://stackoverflow.com/a/13216807/802421
+	private int getActionBarHeight() {
+		Context c = getContext();
+		TypedValue tv = new TypedValue();
+		int abh = 0;
+		if (c.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+			abh = TypedValue.complexToDimensionPixelSize(tv.data, c.getResources().getDisplayMetrics());
+		}
+		return abh;
 	}
 
 	public int getBehindWidth() {
